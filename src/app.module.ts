@@ -1,3 +1,11 @@
+/* Model 6 Appointment Booking System
+**Core Models**
+
+* Service
+* Appointment
+
+**Description**
+ระบบจองบริการหรือคิว เหมาะสำหรับฝึก validation เชิงเงื่อนไขและการจัดการเวลา*/
 import { Module } from '@nestjs/common';
 
 @Module({
@@ -6,3 +14,4 @@ import { Module } from '@nestjs/common';
   providers: [],
 })
 export class AppModule {}
+//test git push รอบล้านแปด
