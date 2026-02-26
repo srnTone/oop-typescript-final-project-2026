@@ -7,9 +7,24 @@
   "license": "MIT",
   "contributors": [
     {
-      "fullname": "John Doe",
-      "username": "username1",
-      "studentId": "12345678"
+      "fullname": "Saran Kongdam",
+      "username": "srnTone",
+      "studentId": "68011813"
+    },
+    {
+      "fullname": "Jane Smith",
+      "username": "username2",
+      "studentId": "87654321"
+    },
+    {
+      "fullname": "Alice Johnson",
+      "username": "username3",
+      "studentId": "11223344"
+    },
+    {
+      "fullname": "Bob Brown",
+      "username": "username4",
+      "studentId": "44332211"
     }
   ],
   "project": {
