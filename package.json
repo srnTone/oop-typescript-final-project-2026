@@ -12,19 +12,19 @@
       "studentId": "68011813"
     },
     {
-      "fullname": "Jane Smith",
-      "username": "username2",
-      "studentId": "87654321"
+      "fullname": "",
+      "username": "",
+      "studentId": "1"
     },
     {
-      "fullname": "Alice Johnson",
-      "username": "username3",
-      "studentId": "11223344"
+      "fullname": "",
+      "username": "",
+      "studentId": ""
     },
     {
-      "fullname": "Bob Brown",
-      "username": "username4",
-      "studentId": "44332211"
+      "fullname": "",
+      "username": "",
+      "studentId": ""
     }
   ],
   "project": {
