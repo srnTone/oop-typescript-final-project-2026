@@ -1,3 +1,4 @@
+```mermaid
 classDiagram
 direction TB
 
@@ -43,3 +44,4 @@ class Appointment {
 }
 
 Service "1" --> "*" Appointment : contains
+```
