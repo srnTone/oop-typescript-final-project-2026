@@ -1,4 +1,4 @@
-```mermaid
+``` mermaid
 classDiagram
     direction TB
 
@@ -7,6 +7,7 @@ classDiagram
         +success: boolean
         +message: string
         +data: T
+        +timestamp: date
     }
 
     class ServiceStatus {
@@ -45,9 +46,11 @@ classDiagram
         +customerPhone: string
         +appointmentDate: date
         +startTime: string
+        +endTime: string
         +status: AppointmentStatus 
         +notes: string
         +createdAt: date
+        updateAt: date 
     }
 
     class ServicesController {
