@@ -2,101 +2,91 @@
 classDiagram
     direction TB
 
-    package Common {
-        class ApiResponse {
-            <<interface>>
-            +success: boolean
-            +message: string
-            +data: T
-        }
+    class ApiResponse {
+        <<interface>>
+        +boolean success
+        +string message
+        +T data
     }
 
-    package Enums {
-        class ServiceStatus {
-            <<enumeration>>
-            AVAILABLE
-            UNAVAILABLE
-            MAINTENANCE
-        }
-
-        class AppointmentStatus {
-            <<enumeration>>
-            PENDING
-            CONFIRMED
-            CANCELLED
-            COMPLETED
-        }
+    class ServiceStatus {
+        <<enumeration>>
+        AVAILABLE
+        UNAVAILABLE
+        MAINTENANCE
     }
 
-    package DataModels {
-        class Service {
-            +id: string
-            +name: string
-            +description: string
-            +price: number
-            +durationMinutes: number
-            +status: ServiceStatus
-            +category: string
-            +isActive: boolean
-            +createdAt: Date
-            +updatedAt: Date
-        }
-
-        class Appointment {
-            +id: string
-            +serviceId: string
-            +customerName: string
-            +customerEmail: string
-            +customerPhone: string
-            +appointmentDate: Date
-            +startTime: string
-            +status: AppointmentStatus
-            +notes: string
-            +createdAt: Date
-        }
+    class AppointmentStatus {
+        <<enumeration>>
+        PENDING
+        CONFIRMED
+        CANCELLED
+        COMPLETED
     }
 
-    package Controllers {
-        class ServicesController {
-            +create(CreateServiceDto) ApiResponse
-            +findAll() ApiResponse
-            +findOne(id) ApiResponse
-            +update(id, UpdateServiceDto) ApiResponse
-            +remove(id) ApiResponse
-        }
-
-        class AppointmentsController {
-            +create(CreateAppointmentDto) ApiResponse
-            +findAll() ApiResponse
-            +findOne(id) ApiResponse
-            +update(id, UpdateAppointmentDto) ApiResponse
-            +remove(id) ApiResponse
-        }
+    class Service {
+        +String id
+        +String name
+        +String description
+        +Number price
+        +Number durationMinutes
+        +ServiceStatus status
+        +String category
+        +Boolean isActive
+        +Date createdAt
+        +Date updatedAt
     }
 
-    package Services {
-        class ServicesLogic {
-            +create(CreateServiceDto) Service
-            +findAll() List~Service~
-            +findOne(id) Service
-            +update(id, UpdateServiceDto) Service
-            +remove(id) void
-        }
-
-        class AppointmentsLogic {
-            +create(CreateAppointmentDto) Appointment
-            +findAll() List~Appointment~
-            +findOne(id) Appointment
-            +update(id, UpdateAppointmentDto) Appointment
-            +remove(id) void
-        }
+    class Appointment {
+        +String id
+        +String serviceId
+        +String customerName
+        +String customerEmail
+        +String customerPhone
+        +Date appointmentDate
+        +String startTime
+        +AppointmentStatus status
+        +String notes
+        +Date createdAt
     }
 
-    ServicesController --> ServicesLogic : calls
-    AppointmentsController --> AppointmentsLogic : calls
+    class ServicesController {
+        +create(CreateServiceDto) ApiResponse
+        +findAll() ApiResponse
+        +findOne(id) ApiResponse
+        +update(id, UpdateServiceDto) ApiResponse
+        +remove(id) ApiResponse
+    }
+
+    class AppointmentsController {
+        +create(CreateAppointmentDto) ApiResponse
+        +findAll() ApiResponse
+        +findOne(id) ApiResponse
+        +update(id, UpdateAppointmentDto) ApiResponse
+        +remove(id) ApiResponse
+    }
+
+    class ServicesService {
+        +create(CreateServiceDto) Service
+        +findAll() List~Service~
+        +findOne(id) Service
+        +update(id, UpdateServiceDto) Service
+        +remove(id) void
+    }
+
+    class AppointmentsService {
+        +create(CreateAppointmentDto) Appointment
+        +findAll() List~Appointment~
+        +findOne(id) Appointment
+        +update(id, UpdateAppointmentDto) Appointment
+        +remove(id) void
+    }
+
+    ServicesController --> ServicesService : calls
+    AppointmentsController --> AppointmentsService : calls
     
-    ServicesLogic "1" *-- "*" Service : manages
-    AppointmentsLogic "1" *-- "*" Appointment : manages
+    ServicesService "1" *-- "*" Service : manages
+    AppointmentsService "1" *-- "*" Appointment : manages
     
     Appointment "*" --> "1" Service : references serviceId
     
