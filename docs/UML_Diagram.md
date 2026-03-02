@@ -4,9 +4,9 @@ classDiagram
 
     class ApiResponse {
         <<interface>>
-        +boolean success
-        +string message
-        +T data
+        +success: boolean
+        +message: string
+        +data: T
     }
 
     class ServiceStatus {
@@ -25,29 +25,29 @@ classDiagram
     }
 
     class Service {
-        +String id
-        +String name
-        +String description
-        +Number price
-        +Number durationMinutes
-        +ServiceStatus status
-        +String category
-        +Boolean isActive
-        +Date createdAt
-        +Date updatedAt
+        +id: string
+        +name: string
+        +description: string
+        +price: number
+        +durationMinutes: number
+        +status: ServiceStatus 
+        +category: string
+        +isActive: boolean
+        +createdAt: date
+        +updatedAt: date
     }
 
     class Appointment {
-        +String id
-        +String serviceId
-        +String customerName
-        +String customerEmail
-        +String customerPhone
-        +Date appointmentDate
-        +String startTime
-        +AppointmentStatus status
-        +String notes
-        +Date createdAt
+        +id: string
+        +serviceId: string
+        +customerName: string
+        +customerEmail: string
+        +customerPhone: string
+        +appointmentDate: date
+        +startTime: string
+        +status: AppointmentStatus 
+        +notes: string
+        +createdAt: date
     }
 
     class ServicesController {
