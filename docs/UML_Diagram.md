@@ -50,7 +50,7 @@ classDiagram
         +status: AppointmentStatus 
         +notes: string
         +createdAt: date
-        updateAt: date 
+        +updateAt: date 
     }
 
     class ServicesController {
