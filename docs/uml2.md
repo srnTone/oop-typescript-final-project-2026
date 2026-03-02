@@ -1,3 +1,4 @@
+```mermaid
 classDiagram
     direction TB
 
@@ -127,3 +128,4 @@ classDiagram
         - durationMinutes must be > 0
         - price must be >= 0
     end note
+```
