@@ -1,4 +1,6 @@
+
 {
+  
   "name": "nestjs-backend-api",
   "version": "1.0.0",
   "description": "NestJS Backend API Template for Class Project",
@@ -7,22 +9,22 @@
   "license": "MIT",
   "contributors": [
     {
-      "fullname": "Saran Kongdam",
+      "name": "Saran Kongdam",
       "username": "srnTone",
       "studentId": "68011813"
     },
     {
-      "fullname": "Supphakorn Phaefuen",
+      "name": "Supphakorn Phaefuen",
       "username": "bosswanttolearn",
       "studentId": "68011820"
     },
     {
-      "fullname": "Supawit Siripan",
+      "name": "Supawit Siripan",
       "username": "xSolitary",
       "studentId": "68011827"
     },
     {
-      "fullname": "Potchara Mano",
+      "name": "Potchara Mano",
       "username": "potcharaeiei",
       "studentId": "68010736"
     }
