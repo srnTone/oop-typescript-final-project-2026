@@ -1,47 +1,105 @@
 ```mermaid
 classDiagram
-direction TB
+    direction TB
 
-class ServiceStatus {
-<<enumeration>>
-AVAILABLE
-UNAVAILABLE
-MAINTENANCE
-}
+    package Common {
+        class ApiResponse {
+            <<interface>>
+            +success: boolean
+            +message: string
+            +data: T
+        }
+    }
 
-class AppointmentStatus {
-<<enumeration>>
-PENDING
-CONFIRMED
-CANCELLED
-COMPLETED
-}
+    package Enums {
+        class ServiceStatus {
+            <<enumeration>>
+            AVAILABLE
+            UNAVAILABLE
+            MAINTENANCE
+        }
 
-class Service {
-+String id
-+String name
-+String description
-+Number price
-+Number durationMinutes
-+ServiceStatus status
-+String category
-+Boolean isActive
-+Date createdAt
-+Date updatedAt
-}
+        class AppointmentStatus {
+            <<enumeration>>
+            PENDING
+            CONFIRMED
+            CANCELLED
+            COMPLETED
+        }
+    }
 
-class Appointment {
-+String id
-+String serviceId
-+String customerName
-+String customerEmail
-+String customerPhone
-+Date appointmentDate
-+String startTime
-+AppointmentStatus status
-+String notes
-+Date createdAt
-}
+    package DataModels {
+        class Service {
+            +id: string
+            +name: string
+            +description: string
+            +price: number
+            +durationMinutes: number
+            +status: ServiceStatus
+            +category: string
+            +isActive: boolean
+            +createdAt: Date
+            +updatedAt: Date
+        }
 
-Service "1" --> "*" Appointment : contains
+        class Appointment {
+            +id: string
+            +serviceId: string
+            +customerName: string
+            +customerEmail: string
+            +customerPhone: string
+            +appointmentDate: Date
+            +startTime: string
+            +status: AppointmentStatus
+            +notes: string
+            +createdAt: Date
+        }
+    }
+
+    package Controllers {
+        class ServicesController {
+            +create(CreateServiceDto) ApiResponse
+            +findAll() ApiResponse
+            +findOne(id) ApiResponse
+            +update(id, UpdateServiceDto) ApiResponse
+            +remove(id) ApiResponse
+        }
+
+        class AppointmentsController {
+            +create(CreateAppointmentDto) ApiResponse
+            +findAll() ApiResponse
+            +findOne(id) ApiResponse
+            +update(id, UpdateAppointmentDto) ApiResponse
+            +remove(id) ApiResponse
+        }
+    }
+
+    package Services {
+        class ServicesLogic {
+            +create(CreateServiceDto) Service
+            +findAll() List~Service~
+            +findOne(id) Service
+            +update(id, UpdateServiceDto) Service
+            +remove(id) void
+        }
+
+        class AppointmentsLogic {
+            +create(CreateAppointmentDto) Appointment
+            +findAll() List~Appointment~
+            +findOne(id) Appointment
+            +update(id, UpdateAppointmentDto) Appointment
+            +remove(id) void
+        }
+    }
+
+    ServicesController --> ServicesLogic : calls
+    AppointmentsController --> AppointmentsLogic : calls
+    
+    ServicesLogic "1" *-- "*" Service : manages
+    AppointmentsLogic "1" *-- "*" Appointment : manages
+    
+    Appointment "*" --> "1" Service : references serviceId
+    
+    ServicesController ..> ApiResponse : formats
+    AppointmentsController ..> ApiResponse : formats
 ```
