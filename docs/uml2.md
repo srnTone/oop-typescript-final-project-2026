@@ -1,10 +1,9 @@
+## 📊 UML Class Diagram
+
 ```mermaid
 classDiagram
     direction TB
 
-    %% =========================
-    %% Generic API Response
-    %% =========================
     class ApiResponse~T~ {
         <<interface>>
         +success: boolean
@@ -13,9 +12,6 @@ classDiagram
         +timestamp: Date
     }
 
-    %% =========================
-    %% ENUMS
-    %% =========================
     class ServiceStatus {
         <<enumeration>>
         AVAILABLE
@@ -31,9 +27,6 @@ classDiagram
         COMPLETED
     }
 
-    %% =========================
-    %% CORE MODELS
-    %% =========================
     class Service {
         +id: string
         +name: string
@@ -61,71 +54,16 @@ classDiagram
         +updatedAt: Date
     }
 
-    %% =========================
-    %% CONTROLLERS
-    %% =========================
-    class ServicesController {
-        +create(dto: CreateServiceDto) ApiResponse~Service~
-        +findAll() ApiResponse~Service[]~
-        +findOne(id: string) ApiResponse~Service~
-        +update(id: string, dto: UpdateServiceDto) ApiResponse~Service~
-        +remove(id: string) ApiResponse~void~
-    }
+    class ServicesController
+    class AppointmentsController
+    class ServicesService
+    class AppointmentsService
 
-    class AppointmentsController {
-        +create(dto: CreateAppointmentDto) ApiResponse~Appointment~
-        +findAll() ApiResponse~Appointment[]~
-        +findOne(id: string) ApiResponse~Appointment~
-        +update(id: string, dto: UpdateAppointmentDto) ApiResponse~Appointment~
-        +remove(id: string) ApiResponse~void~
-    }
+    ServicesController --> ServicesService
+    AppointmentsController --> AppointmentsService
 
-    %% =========================
-    %% SERVICES (BUSINESS LOGIC)
-    %% =========================
-    class ServicesService {
-        +create(dto: CreateServiceDto) Service
-        +findAll() Service[]
-        +findOne(id: string) Service
-        +update(id: string, dto: UpdateServiceDto) Service
-        +remove(id: string) void
-    }
+    ServicesService "1" --> "*" Service
+    AppointmentsService "1" --> "*" Appointment
 
-    class AppointmentsService {
-        +create(dto: CreateAppointmentDto) Appointment
-        +findAll() Appointment[]
-        +findOne(id: string) Appointment
-        +update(id: string, dto: UpdateAppointmentDto) Appointment
-        +remove(id: string) void
-        -validateTimeSlot(serviceId: string, date: Date, startTime: string, endTime: string) boolean
-    }
-
-    %% =========================
-    %% RELATIONSHIPS
-    %% =========================
-    ServicesController --> ServicesService : calls
-    AppointmentsController --> AppointmentsService : calls
-
-    ServicesService "1" *-- "*" Service : manages
-    AppointmentsService "1" *-- "*" Appointment : manages
-
-    Appointment "*" --> "1" Service : belongsTo
-
-    ServicesController ..> ApiResponse : formats
-    AppointmentsController ..> ApiResponse : formats
-
-    %% =========================
-    %% BUSINESS RULE NOTES
-    %% =========================
-    note for Appointment
-        - endTime must be later than startTime
-        - cannot book past date/time
-        - cannot overlap same service on same date
-        - service must have status = AVAILABLE
-    end note
-
-    note for Service
-        - durationMinutes must be > 0
-        - price must be >= 0
-    end note
+    Appointment "*" --> "1" Service
 ```
