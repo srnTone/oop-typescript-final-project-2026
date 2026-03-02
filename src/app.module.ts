@@ -1,17 +1,8 @@
-/* Model 6 Appointment Booking System
-**Core Models**
-
-* Service
-* Appointment
-
-**Description**
-ระบบจองบริการหรือคิว เหมาะสำหรับฝึก validation เชิงเงื่อนไขและการจัดการเวลา*/
 import { Module } from '@nestjs/common';
+import { ServicesModule } from './modules/services/services.module';
+import { AppointmentsModule } from './modules/appointments/appointments.module';
 
 @Module({
-  imports: [],
-  controllers: [],
-  providers: [],
+  imports: [ServicesModule, AppointmentsModule],
 })
 export class AppModule {}
-//test git push รอบล้านแปด
