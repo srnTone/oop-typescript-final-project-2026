@@ -1,79 +1,85 @@
-@startuml
+```mermaid
+classDiagram
 
 class User {
-  id: string
-  fullName: string
-  email: string
-  phone: string
-  role: UserRole
+  +string id
+  +string fullName
+  +string email
+  +string phone
+  +UserRole role
 }
 
 class Room {
-  id: string
-  roomNumber: string
-  type: RoomType
-  pricePerNight: number
-  capacity: number
-  status: RoomStatus
+  +string id
+  +string roomNumber
+  +RoomType type
+  +number pricePerNight
+  +number capacity
+  +RoomStatus status
 }
 
 class Booking {
-  id: string
-  userId: string
-  roomId: string
-  checkInDate: string
-  checkOutDate: string
-  totalPrice: number
-  status: BookingStatus
+  +string id
+  +string userId
+  +string roomId
+  +string checkInDate
+  +string checkOutDate
+  +number totalPrice
+  +BookingStatus status
 }
 
 class Payment {
-  id: string
-  bookingId: string
-  amount: number
-  paymentDate: string
-  method: PaymentMethod
-  status: PaymentStatus
+  +string id
+  +string bookingId
+  +number amount
+  +string paymentDate
+  +PaymentMethod method
+  +PaymentStatus status
 }
 
-enum UserRole {
+class UserRole {
+  <<enumeration>>
   ADMIN
   CUSTOMER
 }
 
-enum RoomType {
+class RoomType {
+  <<enumeration>>
   STANDARD
   DELUXE
   SUITE
 }
 
-enum RoomStatus {
+class RoomStatus {
+  <<enumeration>>
   AVAILABLE
   OCCUPIED
   MAINTENANCE
 }
 
-enum BookingStatus {
+class BookingStatus {
+  <<enumeration>>
   PENDING
   CONFIRMED
   CANCELLED
   COMPLETED
 }
 
-enum PaymentMethod {
+class PaymentMethod {
+  <<enumeration>>
   CREDIT_CARD
   BANK_TRANSFER
   CASH
 }
 
-enum PaymentStatus {
+class PaymentStatus {
+  <<enumeration>>
   PENDING
   PAID
   FAILED
 }
 
-User "1" -- "many" Booking
-Room "1" -- "many" Booking
-Booking "1" -- "1" Payment
-
-@enduml
+User "1" --> "many" Booking
+Room "1" --> "many" Booking
+Booking "1" --> "1" Payment
+```
