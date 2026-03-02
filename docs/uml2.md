@@ -1,69 +1,79 @@
-## 📊 UML Class Diagram
+@startuml
 
-```mermaid
-classDiagram
-    direction TB
+class User {
+  id: string
+  fullName: string
+  email: string
+  phone: string
+  role: UserRole
+}
 
-    class ApiResponse~T~ {
-        <<interface>>
-        +success: boolean
-        +message: string
-        +data: T
-        +timestamp: Date
-    }
+class Room {
+  id: string
+  roomNumber: string
+  type: RoomType
+  pricePerNight: number
+  capacity: number
+  status: RoomStatus
+}
 
-    class ServiceStatus {
-        <<enumeration>>
-        AVAILABLE
-        UNAVAILABLE
-        MAINTENANCE
-    }
+class Booking {
+  id: string
+  userId: string
+  roomId: string
+  checkInDate: string
+  checkOutDate: string
+  totalPrice: number
+  status: BookingStatus
+}
 
-    class AppointmentStatus {
-        <<enumeration>>
-        PENDING
-        CONFIRMED
-        CANCELLED
-        COMPLETED
-    }
+class Payment {
+  id: string
+  bookingId: string
+  amount: number
+  paymentDate: string
+  method: PaymentMethod
+  status: PaymentStatus
+}
 
-    class Service {
-        +id: string
-        +name: string
-        +description: string
-        +price: number
-        +durationMinutes: number
-        +status: ServiceStatus
-        +category: string
-        +createdAt: Date
-        +updatedAt: Date
-    }
+enum UserRole {
+  ADMIN
+  CUSTOMER
+}
 
-    class Appointment {
-        +id: string
-        +serviceId: string
-        +customerName: string
-        +customerEmail: string
-        +customerPhone: string
-        +appointmentDate: Date
-        +startTime: string
-        +endTime: string
-        +status: AppointmentStatus
-        +notes: string
-        +createdAt: Date
-        +updatedAt: Date
-    }
+enum RoomType {
+  STANDARD
+  DELUXE
+  SUITE
+}
 
-    class ServicesController
-    class AppointmentsController
-    class ServicesService
-    class AppointmentsService
+enum RoomStatus {
+  AVAILABLE
+  OCCUPIED
+  MAINTENANCE
+}
 
-    ServicesController --> ServicesService
-    AppointmentsController --> AppointmentsService
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
 
-    ServicesService "1" --> "*" Service
-    AppointmentsService "1" --> "*" Appointment
+enum PaymentMethod {
+  CREDIT_CARD
+  BANK_TRANSFER
+  CASH
+}
 
-    Appointment "*" --> "1" Service
-```
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+}
+
+User "1" -- "many" Booking
+Room "1" -- "many" Booking
+Booking "1" -- "1" Payment
+
+@enduml
