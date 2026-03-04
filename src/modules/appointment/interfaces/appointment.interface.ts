@@ -1,4 +1,4 @@
-import { AppointmentStatus } from '../enums/appointment-status.enum';
+import { AppointmentStatus } from '../../service/enums/appointment-status.enum';
 
 export interface AppointmentModel {
   id: string;
