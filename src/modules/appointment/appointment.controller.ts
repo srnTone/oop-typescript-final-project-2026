@@ -1,14 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Put,
-  Patch,
-  Delete,
-  Param,
-  Body,
-  HttpCode,
-} from '@nestjs/common';
+import {Controller,Get,Post,Put,Patch,Delete,Param,Body,HttpCode,} from '@nestjs/common';
 import { AppointmentService } from './appointment.service';
 import { ApiResponse } from '../../common/interfaces/api-response.interface';
 import { AppointmentModel } from './interfaces/appointment.interface';
@@ -54,15 +44,28 @@ export class AppointmentController {
   ): ApiResponse<AppointmentModel> {
     return {
       success: true,
-      message: 'Appointment updated successfully',
+      message: 'Appointment fully updated successfully',
       data: this.appointmentService.update(id, dto),
     };
   }
 
+  // --- ส่วนที่เพิ่มใหม่ ---
+  @Patch(':id')
+  partialUpdate(
+    @Param('id') id: string,
+    @Body() dto: UpdateAppointmentDto,
+  ): ApiResponse<AppointmentModel> {
+    return {
+      success: true,
+      message: 'Appointment partially updated successfully',
+      data: this.appointmentService.update(id, dto),
+    };
+  }
+  // ----------------------
+
   @Delete(':id')
   delete(@Param('id') id: string): ApiResponse<null> {
     this.appointmentService.remove(id);
-
     return {
       success: true,
       message: 'Appointment deleted successfully',
