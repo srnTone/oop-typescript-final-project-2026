@@ -1,1 +1,17 @@
-[]
+[
+  {
+    "id": "1",
+    "name": "Deluxe Room",
+    "price": 2000
+  },
+  {
+    "id": "2",
+    "name": "Suite Room",
+    "price": 3500
+  },
+  {
+    "id": "3",
+    "name": "Suite Room",
+    "price": 4500
+  }
+]
