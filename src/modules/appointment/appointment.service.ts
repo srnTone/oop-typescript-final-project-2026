@@ -1,73 +1,48 @@
-import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
-import { AppointmentModel } from './interfaces/appointment.interface';
-import { AppointmentStatus } from './enums/appointment-status.enum';
-import { FileUtil } from '../../common/utils/file.util';
-import { randomUUID } from 'crypto';
-import { CreateAppointmentDto } from './dto/create-appointment.dto';
-import { UpdateAppointmentDto } from './dto/update-appointment.dto';
+import { Injectable } from '@nestjs/common';
+import * as fs from 'fs';
+import * as path from 'path';
 
 @Injectable()
 export class AppointmentService {
-  private readonly filePath = 'data/appointments.json';
+  private filePath = path.join(process.cwd(), 'data/appointments.json');
 
-  findAll(): AppointmentModel[] {
-    return FileUtil.readJsonFile<AppointmentModel[]>(this.filePath);
+  private readData() {
+    const data = fs.readFileSync(this.filePath, 'utf-8');
+    return JSON.parse(data);
   }
 
-  findOne(id: string): AppointmentModel {
-    const appointments = this.findAll();
-    const found = appointments.find(a => a.id === id);
-
-    if (!found) {
-      throw new NotFoundException('Appointment not found');
-    }
-
-    return found;
+  private writeData(data: any) {
+    fs.writeFileSync(this.filePath, JSON.stringify(data, null, 2));
   }
 
-  create(dto: CreateAppointmentDto): AppointmentModel {
-    const appointments = this.findAll();
+  findAll() {
+    return this.readData();
+  }
 
-    if (new Date(dto.appointmentDate) < new Date()) {
-      throw new BadRequestException('Appointment date must be in the future');
-    }
+  findOne(id: string) {
+    const appointments = this.readData();
+    return appointments.find((a: any) => a.id === id);
+  }
 
-    const newAppointment: AppointmentModel = {
-      id: randomUUID(),
-      ...dto,
-      status: AppointmentStatus.PENDING,
-    };
-
+  create(newAppointment: any) {
+    const appointments = this.readData();
     appointments.push(newAppointment);
-    FileUtil.writeJsonFile(this.filePath, appointments);
-
+    this.writeData(appointments);
     return newAppointment;
   }
 
-  update(id: string, dto: UpdateAppointmentDto): AppointmentModel {
-    const appointments = this.findAll();
-    const index = appointments.findIndex(a => a.id === id);
-
-    if (index === -1) {
-      throw new NotFoundException('Appointment not found');
-    }
-
-    const updated = { ...appointments[index], ...dto };
-    appointments[index] = updated;
-
-    FileUtil.writeJsonFile(this.filePath, appointments);
-
-    return updated;
+  update(id: string, updateData: any) {
+    const appointments = this.readData();
+    const index = appointments.findIndex((a: any) => a.id === id);
+    appointments[index] = { ...appointments[index], ...updateData };
+    this.writeData(appointments);
+    return appointments[index];
   }
 
-  remove(id: string): void {
-    const appointments = this.findAll();
-    const filtered = appointments.filter(a => a.id !== id);
-
-    if (filtered.length === appointments.length) {
-      throw new NotFoundException('Appointment not found');
-    }
-
-    FileUtil.writeJsonFile(this.filePath, filtered);
+  remove(id: string) {
+    const appointments = this.readData();
+    const newAppointments = appointments.filter((a: any) => a.id !== id);
+    this.writeData(newAppointments);
+    return { deleted: true };
   }
 }

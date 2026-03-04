@@ -6,4 +6,5 @@ export interface AppointmentModel {
   customerName: string;
   appointmentDate: string; // ISO string
   status: AppointmentStatus;
+  
 }
