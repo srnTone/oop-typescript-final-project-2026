@@ -14,6 +14,7 @@ import { ApiResponse } from '../../common/interfaces/api-response.interface';
 import { AppointmentModel } from './interfaces/appointment.interface';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { UpdateAppointmentDto } from './dto/update-appointment.dto';
+import { AppointmentStatus } from './enums/appointment-status.enum';
 
 @Controller('appointments')
 export class AppointmentController {
@@ -29,21 +30,32 @@ export class AppointmentController {
   }
 
   @Get(':id')
-  getOne(@Param('id') id: string): ApiResponse<AppointmentModel> {
+  getOne(@Param('id') id: string): ApiResponse<AppointmentModel | null> {
+    const appointment = this.appointmentService.findOne(id);
+
     return {
       success: true,
       message: 'Appointment retrieved successfully',
-      data: this.appointmentService.findOne(id),
+      data: appointment ?? null,
     };
   }
 
   @Post()
   @HttpCode(201)
   create(@Body() dto: CreateAppointmentDto): ApiResponse<AppointmentModel> {
+
+    const newAppointment: AppointmentModel = {
+      id: Date.now().toString(),
+      serviceId: dto.serviceId,
+      customerName: dto.customerName,
+      appointmentDate: dto.appointmentDate,
+      status: AppointmentStatus.PENDING,
+    };
+
     return {
       success: true,
       message: 'Appointment created successfully',
-      data: this.appointmentService.create(dto),
+      data: this.appointmentService.create(newAppointment),
     };
   }
 
@@ -51,11 +63,14 @@ export class AppointmentController {
   update(
     @Param('id') id: string,
     @Body() dto: UpdateAppointmentDto,
-  ): ApiResponse<AppointmentModel> {
+  ): ApiResponse<AppointmentModel | null> {
+
+    const updated = this.appointmentService.update(id, dto);
+
     return {
       success: true,
       message: 'Appointment updated successfully',
-      data: this.appointmentService.update(id, dto),
+      data: updated ?? null,
     };
   }
 

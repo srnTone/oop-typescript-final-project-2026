@@ -1,1 +1,9 @@
-[]
+[
+  {
+    "id": "1772790309238",
+    "serviceId": "1",
+    "customerName": "John",
+    "appointmentDate": "2026-03-10T10:00:00Z",
+    "status": "PENDING"
+  }
+]

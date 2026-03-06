@@ -164,7 +164,7 @@
   "@nestjs/platform-express": "^10.0.0",
   
     
-  "@nestjs/swagger": "^7.1.0",
+  "@nestjs/swagger": "^7.4.2",
   
     
   "class-transformer": "^0.5.1",
@@ -176,7 +176,10 @@
   "reflect-metadata": "^0.1.13",
   
     
-  "rxjs": "^7.8.1"
+  "rxjs": "^7.8.1",
+  
+    
+  "swagger-ui-express": "^5.0.1"
   
   },
   
