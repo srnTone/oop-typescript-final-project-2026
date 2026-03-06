@@ -1,4 +1,5 @@
-import { IsString, IsNotEmpty, IsISO8601 } from 'class-validator';
+import { IsString, IsNotEmpty, IsEnum, IsOptional, IsEmail, IsPhoneNumber } from 'class-validator';
+import { AppointmentStatus } from '../enums/appointment-status.enum';
 
 export class CreateAppointmentDto {
   @IsString()
@@ -9,6 +10,25 @@ export class CreateAppointmentDto {
   @IsNotEmpty()
   customerName!: string;
 
-  @IsISO8601()
+  @IsEmail()
+  customerEmail!: string;
+
+  @IsPhoneNumber('TH')
+  customerPhone!: string;
+
+  @IsString()
+  @IsNotEmpty()
   appointmentDate!: string;
+
+  @IsString()
+  @IsNotEmpty()
+  startTime!: string;
+
+  @IsString()
+  @IsOptional()
+  notes?: string;
+
+  @IsEnum(AppointmentStatus)
+  @IsOptional()
+  status?: AppointmentStatus;
 }

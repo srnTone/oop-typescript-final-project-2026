@@ -1,69 +1,85 @@
-## 📊 UML Class Diagram
-
 ```mermaid
 classDiagram
-    direction TB
 
-    class ApiResponse~T~ {
-        <<interface>>
-        +success: boolean
-        +message: string
-        +data: T
-        +timestamp: Date
-    }
+class User {
+  +string id
+  +string fullName
+  +string email
+  +string phone
+  +UserRole role
+}
 
-    class ServiceStatus {
-        <<enumeration>>
-        AVAILABLE
-        UNAVAILABLE
-        MAINTENANCE
-    }
+class Room {
+  +string id
+  +string roomNumber
+  +RoomType type
+  +number pricePerNight
+  +number capacity
+  +RoomStatus status
+}
 
-    class AppointmentStatus {
-        <<enumeration>>
-        PENDING
-        CONFIRMED
-        CANCELLED
-        COMPLETED
-    }
+class Booking {
+  +string id
+  +string userId
+  +string roomId
+  +string checkInDate
+  +string checkOutDate
+  +number totalPrice
+  +BookingStatus status
+}
 
-    class Service {
-        +id: string
-        +name: string
-        +description: string
-        +price: number
-        +durationMinutes: number
-        +status: ServiceStatus
-        +category: string
-        +createdAt: Date
-        +updatedAt: Date
-    }
+class Payment {
+  +string id
+  +string bookingId
+  +number amount
+  +string paymentDate
+  +PaymentMethod method
+  +PaymentStatus status
+}
 
-    class Appointment {
-        +id: string
-        +serviceId: string
-        +customerName: string
-        +customerEmail: string
-        +customerPhone: string
-        +appointmentDate: Date
-        +startTime: string
-        +endTime: string
-        +status: AppointmentStatus
-        +notes: string
-        +createdAt: Date
-        +updatedAt: Date
-    }
+class UserRole {
+  <<enumeration>>
+  ADMIN
+  CUSTOMER
+}
 
-    class ServicesController
-    class AppointmentsController
-    class ServicesService
-    class AppointmentsService
+class RoomType {
+  <<enumeration>>
+  STANDARD
+  DELUXE
+  SUITE
+}
 
-    ServicesController --> ServicesService
-    AppointmentsController --> AppointmentsService
+class RoomStatus {
+  <<enumeration>>
+  AVAILABLE
+  OCCUPIED
+  MAINTENANCE
+}
 
-    ServicesService "1" --> "*" Service
-    AppointmentsService "1" --> "*" Appointment
+class BookingStatus {
+  <<enumeration>>
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
 
-    Appointment "*" --> "1" Service
+class PaymentMethod {
+  <<enumeration>>
+  CREDIT_CARD
+  BANK_TRANSFER
+  CASH
+}
+
+class PaymentStatus {
+  <<enumeration>>
+  PENDING
+  PAID
+  FAILED
+}
+
+User "1" --> "many" Booking
+Room "1" --> "many" Booking
+Booking "1" --> "1" Payment
 ```
