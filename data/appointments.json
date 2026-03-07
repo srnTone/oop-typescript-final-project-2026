@@ -1,20 +1,5 @@
 [
   {
-    "id": "1",
-    "name": "Deluxe Room",
-    "price": 2000
-  },
-  {
-    "id": "2",
-    "name": "Suite Room",
-    "price": 3500
-  },
-  {
-    "id": "3",
-    "name": "Suite Room",
-    "price": 4500
-  },
-  {
     "name": "นวดไทยเพื่อสุขภาพ",
     "description": "นวดผ่อนคลายกล้ามเนื้อด้วยเทคนิคดั้งเดิม",
     "price": 500,
