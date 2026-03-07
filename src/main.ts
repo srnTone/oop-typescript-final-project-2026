@@ -1,22 +1,22 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
-async function bootstrap () {
+async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Setting Global Prefix กรณีเข้าถึงผ่าน /api
+  // 1. Setting Global Prefix เข้าถึงผ่าน /api
   app.setGlobalPrefix('api');
 
-  // Enable Validation Pipe สำหรับตรวจสอบข้อมูล DTO ที่ส่งเข้ามา
+  // 2. Eanable ValidationPipe สำหรับการตรวจสอบข้อมูล DTO
   app.useGlobalPipes(new ValidationPipe({
-    whitelist: true, // อนุญาตเฉพาะฟิลด์ที่กำหนดใน DTO
-    forbidNonWhitelisted: true, // ปฏิเสธการส่งฟิลด์ที่ไม่ได้กำหนดใน DTO
-    transform: true, // แปลงข้อมูลให้ตรงกับประเภทที่กำหนดใน DTO
+    whitelist: true,
+    forbidNonWhitelisted: true,
+    transform: true,
   }));
 
-  // Setting Swagger API Documentation
+  // 3. setting Swagger API Documentation
   const config = new DocumentBuilder()
     .setTitle('Appointment Booking System API')
     .setDescription('The API documentation for the final project')
