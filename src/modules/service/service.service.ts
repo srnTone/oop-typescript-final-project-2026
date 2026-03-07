@@ -34,15 +34,18 @@ export class ServiceService {
     const services = this.readData();
     
     const newService: ServiceModel = {
-      // 1. กระจายข้อมูลจาก dto ก่อน
-      ...dto, 
-      // 2. ระบุฟิลด์ที่ระบบต้องสร้างเองทับลงไป เพื่อป้องกันการถูก overwrite และแก้ตัวแดง
       id: Date.now().toString(),
+      name: dto.name,
+      description: dto.description,
+      price: dto.price,
+      duration: dto.duration,
+      category: dto.category,
+      providerName: dto.providerName,
       status: dto.status || ServiceStatus.AVAILABLE,
       isActive: true,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-    } as ServiceModel;
+    };
 
     services.push(newService);
     this.writeData(services);
