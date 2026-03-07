@@ -40,7 +40,7 @@ export class AppointmentController {
   @Put(':id')
   update(
     @Param('id') id: string,
-    @Body() dto: UpdateAppointmentDto,
+    @Body() dto: CreateAppointmentDto,
   ): ApiResponse<AppointmentModel> {
     return {
       success: true,
