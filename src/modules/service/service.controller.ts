@@ -31,6 +31,16 @@ export class ServiceController {
     };
   }
 
+  @Put(':id')
+  @ApiOperation({ summary: 'อัปเดตข้อมูลบริการทั้งหมด' })
+  updateAll(@Param('id') id: string, @Body() dto: CreateServiceDto): ApiResponse<ServiceModel> {
+    return {
+      success: true,
+      message: 'อัปเดตข้อมูลบริการ (PUT) สำเร็จ',
+      data: this.serviceService.update(id, dto),
+    };
+  }
+
   @Post()
   @HttpCode(201)
   @ApiOperation({ summary: 'สร้างรายการบริการใหม่' })

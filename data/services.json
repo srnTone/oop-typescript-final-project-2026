@@ -89,18 +89,5 @@
     "isActive": true,
     "createdAt": "2026-03-07T12:30:00.000Z",
     "updatedAt": "2026-03-07T12:30:00.000Z"
-  },
-  {
-    "id": "008",
-    "name": "ประกอบคอมพิวเตอร์ตามสั่ง (Custom PC)",
-    "description": "ให้คำปรึกษา จัดสเปก และประกอบคอมพิวเตอร์ตามงบประมาณและความต้องการใช้งาน",
-    "price": 800,
-    "duration": 240,
-    "category": "Sales",
-    "providerName": "ร้านคอมไอที เซอร์วิส",
-    "status": "AVAILABLE",
-    "isActive": true,
-    "createdAt": "2026-03-07T13:00:00.000Z",
-    "updatedAt": "2026-03-07T13:00:00.000Z"
   }
 ]

@@ -31,6 +31,17 @@ export class AppointmentController {
     };
   }
 
+  @Put(':id')
+  @ApiOperation({ summary: 'อัปเดตข้อมูลการนัดหมายทั้งหมด' })
+  updateAll(@Param('id') id: string, @Body() dto: CreateAppointmentDto): ApiResponse<AppointmentModel> {
+    return {
+      success: true,
+      message: 'อัปเดตข้อมูลการนัดหมาย (PUT) สำเร็จ',
+      data: this.appointmentService.update(id, dto),
+    };
+  }
+
+
   @Post()
   @HttpCode(201)
   @ApiOperation({ summary: 'บันทึกการนัดหมายใหม่' })
