@@ -1,1 +1,67 @@
-[]
+[
+{
+"id": "A001",
+"serviceId": "001",
+"customerName": "สมชาย รักดี",
+"customerEmail": "somchai.r@email.com",
+"customerPhone": "0812345678",
+"appointmentDate": "2026-03-10",
+"startTime": "10:30",
+"status": "CONFIRMED",
+"notes": "โน้ตบุ๊กเปิดติดแต่หน้าจอดำสนิท รบกวนตรวจสอบด่วน",
+"createdAt": "2026-03-07T13:00:00.000Z",
+"updatedAt": "2026-03-07T13:00:00.000Z"
+},
+{
+"id": "A002",
+"serviceId": "002",
+"customerName": "วิภาวรรณ ใจงาม",
+"customerEmail": "wipawan.j@email.com",
+"customerPhone": "0898765432",
+"appointmentDate": "2026-03-10",
+"startTime": "14:00",
+"status": "PENDING",
+"notes": "ต้องการเพิ่ม RAM เป็น 16GB และเปลี่ยนเป็น SSD 512GB",
+"createdAt": "2026-03-07T13:15:00.000Z",
+"updatedAt": "2026-03-07T13:15:00.000Z"
+},
+{
+"id": "A003",
+"serviceId": "003",
+"customerName": "เกรียงไกร มีสุข",
+"customerEmail": "kriangkrai.m@email.com",
+"customerPhone": "0855554433",
+"appointmentDate": "2026-03-11",
+"startTime": "09:00",
+"status": "CONFIRMED",
+"notes": "ติดตั้ง Windows 11 และลงโปรแกรมสำหรับตัดต่อวิดีโอ",
+"createdAt": "2026-03-07T14:00:00.000Z",
+"updatedAt": "2026-03-07T14:00:00.000Z"
+},
+{
+"id": "A004",
+"serviceId": "004",
+"customerName": "นภา สว่างจิต",
+"customerEmail": "napa.s@email.com",
+"customerPhone": "0822221111",
+"appointmentDate": "2026-03-11",
+"startTime": "13:30",
+"status": "COMPLETED",
+"notes": "เครื่องร้อนบ่อยมาก ไม่เคยเป่าฝุ่นเลยตั้งแต่ซื้อมา",
+"createdAt": "2026-03-07T14:30:00.000Z",
+"updatedAt": "2026-03-08T10:00:00.000Z"
+},
+{
+"id": "A005",
+"serviceId": "006",
+"customerName": "ธนาธร ทองดี",
+"customerEmail": "thanathorn.t@email.com",
+"customerPhone": "0877778888",
+"appointmentDate": "2026-03-12",
+"startTime": "11:00",
+"status": "PENDING",
+"notes": "External HDD ตกพื้นแล้วเปิดไม่เห็นไดรฟ์ มีไฟล์งานสำคัญมาก",
+"createdAt": "2026-03-08T09:00:00.000Z",
+"updatedAt": "2026-03-08T09:00:00.000Z"
+}
+]
