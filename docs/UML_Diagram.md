@@ -1,13 +1,12 @@
-``` mermaid
+```mermaid
 classDiagram
     direction TB
 
-    class ApiResponse {
+    class ApiResponse~T~ {
         <<interface>>
-        +success: boolean
-        +message: string
-        +data: T
-        +timestamp: date
+        +boolean success
+        +string message
+        +T data
     }
 
     class ServiceStatus {
@@ -15,6 +14,7 @@ classDiagram
         AVAILABLE
         UNAVAILABLE
         MAINTENANCE
+        HIDDEN
     }
 
     class AppointmentStatus {
@@ -25,74 +25,92 @@ classDiagram
         COMPLETED
     }
 
-    class Service {
-        +id: string
-        +name: string
-        +description: string
-        +price: number
-        +durationMinutes: number
-        +status: ServiceStatus 
-        +category: string
-        +isActive: boolean
-        +createdAt: date
-        +updatedAt: date
+    class ServiceModel {
+        <<interface>>
+        +string id
+        +string name
+        +string description
+        +number price
+        +number duration
+        +string category
+        +ServiceStatus status
+        +boolean isActive
+        +string providerName
+        +string createdAt
+        +string updatedAt
     }
 
-    class Appointment {
-        +id: string
-        +serviceId: string
-        +customerName: string
-        +customerEmail: string
-        +customerPhone: string
-        +appointmentDate: date
-        +startTime: string
-        +endTime: string
-        +status: AppointmentStatus 
-        +notes: string
-        +createdAt: date
-        +updateAt: date 
+    class AppointmentModel {
+        <<interface>>
+        +string id
+        +string serviceId
+        +string customerName
+        +string customerEmail
+        +string customerPhone
+        +string appointmentDate
+        +string startTime
+        +AppointmentStatus status
+        +string notes
+        +string createdAt
+        +string updatedAt
     }
 
-    class ServicesController {
-        +create(CreateServiceDto) ApiResponse
+    class ServiceController {
         +findAll() ApiResponse
         +findOne(id) ApiResponse
+        +create(CreateServiceDto) ApiResponse
+        +updateAll(id, CreateServiceDto) ApiResponse
         +update(id, UpdateServiceDto) ApiResponse
         +remove(id) ApiResponse
     }
 
-    class AppointmentsController {
+    class AppointmentController {
+        +getAll() ApiResponse
+        +getOne(id) ApiResponse
         +create(CreateAppointmentDto) ApiResponse
-        +findAll() ApiResponse
-        +findOne(id) ApiResponse
-        +update(id, UpdateAppointmentDto) ApiResponse
-        +remove(id) ApiResponse
+        +updateAll(id, CreateAppointmentDto) ApiResponse
+        +partialUpdate(id, UpdateAppointmentDto) ApiResponse
+        +delete(id) ApiResponse
     }
 
-    class ServicesService {
-        +create(CreateServiceDto) Service
-        +findAll() List~Service~
-        +findOne(id) Service
-        +update(id, UpdateServiceDto) Service
+    class ServiceService {
+        -string dbPath
+        +findAll() ServiceModel[]
+        +findOne(id) ServiceModel
+        +create(CreateServiceDto) ServiceModel
+        +update(id, UpdateServiceDto) ServiceModel
         +remove(id) void
     }
 
-    class AppointmentsService {
-        +create(CreateAppointmentDto) Appointment
-        +findAll() List~Appointment~
-        +findOne(id) Appointment
-        +update(id, UpdateAppointmentDto) Appointment
+    class AppointmentService {
+        -string dbPath
+        +findAll() AppointmentModel[]
+        +findOne(id) AppointmentModel
+        +create(CreateAppointmentDto) AppointmentModel
+        +update(id, UpdateAppointmentDto) AppointmentModel
         +remove(id) void
     }
 
-    ServicesController --> ServicesService : calls
-    AppointmentsController --> AppointmentsService : calls
+    class FileUtil {
+        +readJsonFile(path) T
+        +writeJsonFile(path, data) void
+    }
+
+    %% Relationships
+    ServiceController --> ServiceService : "uses"
+    AppointmentController --> AppointmentService : "uses"
     
-    ServicesService "1" *-- "*" Service : manages
-    AppointmentsService "1" *-- "*" Appointment : manages
+    ServiceService ..> FileUtil : "uses for DB"
+    AppointmentService ..> FileUtil : "uses for DB"
     
-    Appointment "*" --> "1" Service : references serviceId
+    ServiceService "1" *-- "many" ServiceModel : "manages"
+    AppointmentService "1" *-- "many" AppointmentModel : "manages"
     
-    ServicesController ..> ApiResponse : formats
-    AppointmentsController ..> ApiResponse : formats
+    AppointmentModel "*" --> "1" ServiceModel : "references serviceId"
+    
+    ServiceModel ..> ServiceStatus : "uses"
+    AppointmentModel ..> AppointmentStatus : "uses"
+    
+    ServiceController ..> ApiResponse : "returns"
+    AppointmentController ..> ApiResponse : "returns"
 ```
