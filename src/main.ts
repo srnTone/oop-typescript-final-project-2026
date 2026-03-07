@@ -3,35 +3,32 @@ import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
-async function bootstrap(): Promise<void> {
+async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Enable CORS
-  app.enableCors();
+  // 1. Setting Global Prefix เข้าถึงผ่าน /api
+  app.setGlobalPrefix('api');
 
-  // Global validation pipe
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
-      transform: true,
-    }),
-  );
+  // 2. Eanable ValidationPipe สำหรับการตรวจสอบข้อมูล DTO
+  app.useGlobalPipes(new ValidationPipe({
+    whitelist: true,
+    forbidNonWhitelisted: true,
+    transform: true,
+  }));
 
-  // Swagger/OpenAPI documentation
+  // 3. setting Swagger API Documentation
   const config = new DocumentBuilder()
-    .setTitle('NestJS Backend API')
-    .setDescription('API Documentation for NestJS Backend Project')
+    .setTitle('Appointment Booking System API')
+    .setDescription('The API documentation for the final project')
     .setVersion('1.0')
-    .addTag('api')
+    .addTag('appointments')
+    .addTag('services')
     .build();
+    
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('api/docs', app, document); // เข้าดูได้ที่ http://localhost:3000/api/docs
 
-  const port = 3000;
-  await app.listen(port);
-  console.log(`Application is running on: http://localhost:${port}`);
-  console.log(`Swagger documentation: http://localhost:${port}/api`);
+  await app.listen(3000);
 }
 
 bootstrap();
