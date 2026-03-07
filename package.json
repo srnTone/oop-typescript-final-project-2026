@@ -32,7 +32,7 @@
   "id": "6",
   "name": "Appointment Booking System"
   },
-  "sumStudentId": 272046196
+  "sumStudentId": 272045196
   },
   "scripts": {
     "build": "nest build",
