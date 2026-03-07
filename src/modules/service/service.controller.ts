@@ -4,6 +4,7 @@ import { ApiResponse } from '../../common/interfaces/api-response.interface';
 import { ServiceService } from './service.service';
 import { CreateServiceDto } from './dto/create-service.dto';
 import { UpdateServiceDto } from './dto/update-service.dto';
+import { CreateAppointmentDto } from '../appointment/dto/create-appointment.dto';
 
 @Controller('services')
 export class ServiceController {
@@ -29,7 +30,7 @@ export class ServiceController {
   }
 
   @Put(':id')
-  updateFull(@Param('id') id: string, @Body() dto: UpdateServiceDto): ApiResponse<ServiceModel> {
+  updateFull(@Param('id') id: string, @Body() dto: CreateServiceDto): ApiResponse<ServiceModel> {
     return {
       success: true,
       message: 'Service fully updated successfully',

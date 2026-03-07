@@ -26,5 +26,18 @@
     "isActive": true,
     "createdAt": "2026-03-04T15:56:44.117Z",
     "updatedAt": "2026-03-04T15:56:44.117Z"
+  },
+  {
+    "name": "นวดไทยต้นตำรับ",
+    "description": "นวดเพื่อสุขภาพเพื่อผ่อนคลายกล้ามเนื้อและความเครียด",
+    "price": 450,
+    "duration": 60,
+    "category": "Massage",
+    "providerName": "เรือนสราญสุขภาพ",
+    "status": "AVAILABLE",
+    "id": "1772875305074",
+    "isActive": true,
+    "createdAt": "2026-03-07T09:21:45.074Z",
+    "updatedAt": "2026-03-07T09:21:45.074Z"
   }
 ]
