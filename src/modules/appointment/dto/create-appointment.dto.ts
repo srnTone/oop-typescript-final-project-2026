@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsEnum, IsOptional, IsEmail, IsPhoneNumber } from 'class-validator';
+import { IsString, IsNotEmpty, IsEnum, IsOptional, IsEmail, Matches } from 'class-validator';
 import { AppointmentStatus } from '../enums/appointment-status.enum';
 
 // ข้อกำหนดการรับข้อมูลสำหรับการสร้างการจองใหม่
@@ -15,7 +15,7 @@ export class CreateAppointmentDto {
   @IsNotEmpty({ message: 'กรุณาระบุอีเมลติดต่อ' })
   customerEmail!: string;
 
-  @IsPhoneNumber('TH', { message: 'เบอร์โทรศัพท์ต้องเป็นรูปแบบของประเทศไทย' })
+  @Matches(/^0\d{9}$/, { message: 'เบอร์โทรศัพท์ต้องขึ้นต้นด้วย 0 และมีความยาว 10 หลัก (เช่น 0812345678)' })
   @IsNotEmpty({ message: 'กรุณาระบุเบอร์โทรศัพท์' })
   customerPhone!: string;
 
