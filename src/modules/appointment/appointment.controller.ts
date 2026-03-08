@@ -48,7 +48,7 @@ export class AppointmentController {
     return {
       success: true,
       message: 'แทนที่ข้อมูลการนัดหมาย (PUT) สำเร็จ',
-      data: this.appointmentService.replace(id, dto), // เปลี่ยนไปเรียก replace
+      data: this.appointmentService.replace(id, dto), 
     };
   }
 
@@ -61,7 +61,7 @@ export class AppointmentController {
     return {
       success: true,
       message: 'อัปเดตข้อมูลการนัดหมายบางส่วน (PATCH) สำเร็จ',
-      data: this.appointmentService.update(id, dto), // เรียก update เหมือนเดิม
+      data: this.appointmentService.update(id, dto), 
     };
   }
 
