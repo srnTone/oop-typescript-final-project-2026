@@ -1,7 +1,6 @@
 import { IsString, IsNotEmpty, IsEnum, IsOptional, IsEmail, Matches } from 'class-validator';
 import { AppointmentStatus } from '../enums/appointment-status.enum';
 
-// ข้อกำหนดการรับข้อมูลสำหรับการสร้างการจองใหม่
 export class CreateAppointmentDto {
   @IsString({ message: 'รหัสบริการต้องเป็นข้อความ' })
   @IsNotEmpty({ message: 'กรุณาระบุรหัสบริการที่ต้องการจอง' })

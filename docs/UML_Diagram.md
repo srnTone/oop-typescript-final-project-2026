@@ -79,16 +79,21 @@ classDiagram
         +findOne(id) ServiceModel
         +create(CreateServiceDto) ServiceModel
         +update(id, UpdateServiceDto) ServiceModel
+        +replace(id, CreateServiceDto) ServiceModel
         +remove(id) void
     }
 
     class AppointmentService {
         -string dbPath
+        -string servicesDbPath
         +findAll() AppointmentModel[]
         +findOne(id) AppointmentModel
         +create(CreateAppointmentDto) AppointmentModel
         +update(id, UpdateAppointmentDto) AppointmentModel
+        +replace(id, CreateAppointmentDto) AppointmentModel
         +remove(id) void
+        -timeToMinutes(time) number
+        -checkOverlap(excludeId, dto, allAppointments) void
     }
 
     class FileUtil {
