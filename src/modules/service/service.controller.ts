@@ -37,7 +37,7 @@ export class ServiceController {
     return {
       success: true,
       message: 'แทนที่ข้อมูลบริการ (PUT) สำเร็จ',
-      data: this.serviceService.replace(id, dto), // เปลี่ยนไปเรียก replace
+      data: this.serviceService.replace(id, dto), 
     };
   }
 
@@ -47,7 +47,7 @@ export class ServiceController {
     return {
       success: true,
       message: 'อัปเดตข้อมูลบริการบางส่วน (PATCH) สำเร็จ',
-      data: this.serviceService.update(id, dto), // เรียก update เหมือนเดิม
+      data: this.serviceService.update(id, dto), 
     };
   }
 
