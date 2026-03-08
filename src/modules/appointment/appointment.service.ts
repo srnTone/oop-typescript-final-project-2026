@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
-import { FileUtil } from '../../common/utils/file.util'; // ใช้เครื่องมือจัดการไฟล์ส่วนกลาง
+import { FileUtil } from '../../common/utils/file.util'; 
 import { AppointmentModel } from './interfaces/appointment.interface';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { UpdateAppointmentDto } from './dto/update-appointment.dto';
@@ -10,13 +10,14 @@ import { ServiceModel } from '../service/interfaces/service.interface';
 export class AppointmentService {
   private readonly dbPath = 'data/appointments.json';
   private readonly servicesDbPath = 'data/services.json';
+  private timeToMinutes(time: string): number { // แปลงเวลา "HH:mm" เป็นนาทีทั้งหมด
+    const [hours, minutes] = time.split(':').map(Number);
+    return hours * 60 + minutes;
+  }
 
-  // ดึงรายการนัดหมายทั้งหมด
   findAll(): AppointmentModel[] {
     return FileUtil.readJsonFile<AppointmentModel[]>(this.dbPath);
   }
-
-  // ค้นหาการนัดหมายด้วย ID, @throws NotFoundException หากไม่พบข้อมูล
 
   findOne(id: string): AppointmentModel {
     const appointments = this.findAll();
@@ -27,21 +28,38 @@ export class AppointmentService {
     return appointment;
   }
 
-// สร้างการนัดหมายใหม่
   create(dto: CreateAppointmentDto): AppointmentModel {
     const services = FileUtil.readJsonFile<ServiceModel[]>(this.servicesDbPath);
-    const serviceExists = services.some(s => s.id === dto.serviceId);
+    const targetService = services.find(s => s.id === dto.serviceId);
     
-    if (!serviceExists) {
+    if (!targetService) {
       throw new BadRequestException(`ไม่สามารถจองได้ เนื่องจากไม่พบรหัสบริการ: ${dto.serviceId}`);
     }
 
+    const newStart = this.timeToMinutes(dto.startTime);
+    const newEnd = newStart + targetService.duration;
     const appointments = this.findAll();
-    
-    // สร้าง Object ใหม่โดยจัดการเรื่องค่าว่างให้ถูกต้องตามType
+    const isOverlapping = appointments.some(app => {
+      if (app.appointmentDate !== dto.appointmentDate || app.status === AppointmentStatus.CANCELLED) {
+        return false;
+      }
+
+      const existingService = services.find(s => s.id === app.serviceId);
+      if (!existingService) return false;
+
+      const existingStart = this.timeToMinutes(app.startTime);
+      const existingEnd = existingStart + existingService.duration;
+      return newStart < existingEnd && newEnd > existingStart;
+    });
+
+    if (isOverlapping) {
+      throw new BadRequestException('ช่วงเวลาดังกล่าวมีการจองแล้ว กรุณาเลือกเวลาอื่น');
+    }
+
     const newAppointment: AppointmentModel = {
-      id: Date.now().toString(),
+      id: `AP${Date.now().toString().slice(-6)}`,
       ...dto,
+      customerPhone: dto.customerPhone,
       notes: dto.notes ?? '', 
       status: dto.status || AppointmentStatus.PENDING,
       createdAt: new Date().toISOString(),
@@ -53,13 +71,16 @@ export class AppointmentService {
     return newAppointment;
   }
 
-  // แก้ไขข้อมูลการนัดหมาย
   update(id: string, dto: UpdateAppointmentDto): AppointmentModel {
     const appointments = this.findAll();
     const index = appointments.findIndex((a) => a.id === id);
     
     if (index === -1) {
       throw new NotFoundException(`ไม่สามารถแก้ไขได้ เนื่องจากไม่พบรหัสการนัดหมาย: ${id}`);
+    }
+
+    if (dto.startTime || dto.serviceId || dto.appointmentDate) {
+      this.checkOverlap(id, dto, appointments);
     }
 
     appointments[index] = {
@@ -80,10 +101,13 @@ export class AppointmentService {
       throw new NotFoundException(`ไม่สามารถแทนที่ได้ เนื่องจากไม่พบรหัสการนัดหมาย: ${id}`);
     }
 
+    this.checkOverlap(id, dto, appointments);
+
     const existing = appointments[index];
     const replacedAppointment: AppointmentModel = {
       id: existing.id,
       ...dto,
+      customerPhone: dto.customerPhone,
       notes: dto.notes ?? '',
       status: dto.status || AppointmentStatus.PENDING,
       createdAt: existing.createdAt,
@@ -95,11 +119,40 @@ export class AppointmentService {
     return replacedAppointment;
   }
 
-  // ลบการนัดหมาย
+  private checkOverlap(excludeId: string, dto: any, allAppointments: AppointmentModel[]) {
+    const services = FileUtil.readJsonFile<ServiceModel[]>(this.servicesDbPath);
+    const currentApp = allAppointments.find(a => a.id === excludeId);
+    
+    const serviceId = dto.serviceId || currentApp?.serviceId;
+    const date = dto.appointmentDate || currentApp?.appointmentDate;
+    const startTime = dto.startTime || currentApp?.startTime;
+    
+    const targetService = services.find(s => s.id === serviceId);
+    if (!targetService) return;
+
+    const start = this.timeToMinutes(startTime);
+    const end = start + targetService.duration;
+    const overlapping = allAppointments.some(app => {
+      if (app.id === excludeId || app.appointmentDate !== date || app.status === AppointmentStatus.CANCELLED) {
+        return false;
+      }
+      const existingService = services.find(s => s.id === app.serviceId);
+      if (!existingService) return false;
+
+      const exStart = this.timeToMinutes(app.startTime);
+      const exEnd = exStart + existingService.duration;
+
+      return start < exEnd && end > exStart;
+    });
+
+    if (overlapping) {
+      throw new BadRequestException('ไม่สามารถเปลี่ยนเวลาได้ เนื่องจากทับซ้อนกับรายการอื่น');
+    }
+  }
+
   remove(id: string): void {
     const appointments = this.findAll();
-    this.findOne(id); // ตรวจสอบว่ามีข้อมูลก่อนลบ
-    
+    this.findOne(id);
     const filtered = appointments.filter((a) => a.id !== id);
     FileUtil.writeJsonFile(this.dbPath, filtered);
   }

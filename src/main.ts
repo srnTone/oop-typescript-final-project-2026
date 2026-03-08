@@ -3,21 +3,20 @@ import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
-// Fuction เริ่มต้น Entry Point [ ดึงค่าพื้นฐาน NestJS Application ก่อนเริ่ม request]
+// Fuction เริ่มต้น Entry Point 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // 1. Setting Global Prefix กำหนด Prefix หลักสำหรับทุกๆ API Path เป็น /api เพื่อแยกส่วนของ API ออกจากส่วนอื่นๆ
-  app.setGlobalPrefix('api');
+  // 1. Setting Global Prefix 
 
-  // 2. Eanable ValidationPipe ตั้งค่าการตรวจสอบข้อมูล (Global Validation) ช่วยตรวจสอบข้อมูลที่รับเข้ามาผ่าน DTO ให้ถูกต้องตามเงื่อนไขที่กำหนดไว้
+  // 2. Eanable ValidationPipe 
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true,
     forbidNonWhitelisted: true,
     transform: true,
   }));
 
-  // 3. setting Swagger API Documentation แบบ Interface เข้าตรวจสอบได้ผ่าน browser
+  // 3. setting Swagger API Documentation
   const config = new DocumentBuilder()
     .setTitle('Appointment Booking System API')
     .setDescription('The API documentation for the final project')
