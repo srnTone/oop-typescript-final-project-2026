@@ -31,17 +31,6 @@ export class AppointmentController {
     };
   }
 
-  @Put(':id')
-  @ApiOperation({ summary: 'อัปเดตข้อมูลการนัดหมายทั้งหมด' })
-  updateAll(@Param('id') id: string, @Body() dto: CreateAppointmentDto): ApiResponse<AppointmentModel> {
-    return {
-      success: true,
-      message: 'อัปเดตข้อมูลการนัดหมาย (PUT) สำเร็จ',
-      data: this.appointmentService.update(id, dto),
-    };
-  }
-
-
   @Post()
   @HttpCode(201)
   @ApiOperation({ summary: 'บันทึกการนัดหมายใหม่' })
@@ -53,16 +42,26 @@ export class AppointmentController {
     };
   }
 
+  @Put(':id')
+  @ApiOperation({ summary: 'อัปเดตข้อมูลการนัดหมายทั้งหมด (Replace)' })
+  updateAll(@Param('id') id: string, @Body() dto: CreateAppointmentDto): ApiResponse<AppointmentModel> {
+    return {
+      success: true,
+      message: 'แทนที่ข้อมูลการนัดหมาย (PUT) สำเร็จ',
+      data: this.appointmentService.replace(id, dto), // เปลี่ยนไปเรียก replace
+    };
+  }
+
   @Patch(':id')
-  @ApiOperation({ summary: 'แก้ไขข้อมูลการนัดหมายบางส่วน' })
+  @ApiOperation({ summary: 'แก้ไขข้อมูลการนัดหมายบางส่วน (Partial Update)' })
   partialUpdate(
     @Param('id') id: string,
     @Body() dto: UpdateAppointmentDto,
   ): ApiResponse<AppointmentModel> {
     return {
       success: true,
-      message: 'อัปเดตข้อมูลการนัดหมายสำเร็จ',
-      data: this.appointmentService.update(id, dto),
+      message: 'อัปเดตข้อมูลการนัดหมายบางส่วน (PATCH) สำเร็จ',
+      data: this.appointmentService.update(id, dto), // เรียก update เหมือนเดิม
     };
   }
 
