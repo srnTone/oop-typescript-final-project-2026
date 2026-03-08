@@ -1,9 +1,3 @@
-# API Specification
-## Appointment Booking System
-Version 1.0.0
-
----
-
 ## 1. Overview
 
 เอกสารฉบับนี้อธิบายรายละเอียดของ RESTful API สำหรับระบบ **Appointment Booking System**  
