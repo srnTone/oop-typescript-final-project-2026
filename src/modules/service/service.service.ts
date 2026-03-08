@@ -64,6 +64,30 @@ export class ServiceService {
     FileUtil.writeJsonFile(this.dbPath, services);
     return services[index];
   }
+  
+  replace(id: string, dto: CreateServiceDto): ServiceModel {
+    const services = this.findAll();
+    const index = services.findIndex((s) => s.id === id);
+    
+    if (index === -1) {
+      throw new NotFoundException(`ไม่สามารถแทนที่ได้ เนื่องจากไม่พบรหัสบริการ: ${id}`);
+    }
+
+    const existing = services[index];
+    // แทนที่ข้อมูลเดิมทั้งหมดด้วยข้อมูลใหม่จาก DTO (ยกเว้น id และ createdAt)
+    const replacedService: ServiceModel = {
+      id: existing.id,
+      ...dto,
+      status: dto.status || ServiceStatus.AVAILABLE,
+      isActive: existing.isActive, // คงสถานะเดิมไว้หรือกำหนดค่าเริ่มต้นใหม่
+      createdAt: existing.createdAt,
+      updatedAt: new Date().toISOString(),
+    };
+
+    services[index] = replacedService;
+    FileUtil.writeJsonFile(this.dbPath, services);
+    return replacedService;
+  }
 
   // ลบข้อมูลบริการออกจากระบบ @param id รหัสบริการที่ต้องการลบ
   remove(id: string): void {

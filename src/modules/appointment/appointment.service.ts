@@ -72,6 +72,29 @@ export class AppointmentService {
     return appointments[index];
   }
 
+  replace(id: string, dto: CreateAppointmentDto): AppointmentModel {
+    const appointments = this.findAll();
+    const index = appointments.findIndex((a) => a.id === id);
+    
+    if (index === -1) {
+      throw new NotFoundException(`ไม่สามารถแทนที่ได้ เนื่องจากไม่พบรหัสการนัดหมาย: ${id}`);
+    }
+
+    const existing = appointments[index];
+    const replacedAppointment: AppointmentModel = {
+      id: existing.id,
+      ...dto,
+      notes: dto.notes ?? '',
+      status: dto.status || AppointmentStatus.PENDING,
+      createdAt: existing.createdAt,
+      updatedAt: new Date().toISOString(),
+    };
+
+    appointments[index] = replacedAppointment;
+    FileUtil.writeJsonFile(this.dbPath, appointments);
+    return replacedAppointment;
+  }
+
   // ลบการนัดหมาย
   remove(id: string): void {
     const appointments = this.findAll();

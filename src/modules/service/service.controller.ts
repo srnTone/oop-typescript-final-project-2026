@@ -32,12 +32,22 @@ export class ServiceController {
   }
 
   @Put(':id')
-  @ApiOperation({ summary: 'อัปเดตข้อมูลบริการทั้งหมด' })
+  @ApiOperation({ summary: 'อัปเดตข้อมูลบริการทั้งหมด (Replace)' })
   updateAll(@Param('id') id: string, @Body() dto: CreateServiceDto): ApiResponse<ServiceModel> {
     return {
       success: true,
-      message: 'อัปเดตข้อมูลบริการ (PUT) สำเร็จ',
-      data: this.serviceService.update(id, dto),
+      message: 'แทนที่ข้อมูลบริการ (PUT) สำเร็จ',
+      data: this.serviceService.replace(id, dto), // เปลี่ยนไปเรียก replace
+    };
+  }
+
+  @Patch(':id')
+  @ApiOperation({ summary: 'แก้ไขข้อมูลบริการบางส่วน (Partial Update)' })
+  update(@Param('id') id: string, @Body() dto: UpdateServiceDto): ApiResponse<ServiceModel> {
+    return {
+      success: true,
+      message: 'อัปเดตข้อมูลบริการบางส่วน (PATCH) สำเร็จ',
+      data: this.serviceService.update(id, dto), // เรียก update เหมือนเดิม
     };
   }
 
@@ -49,16 +59,6 @@ export class ServiceController {
       success: true,
       message: 'สร้างบริการใหม่เรียบร้อยแล้ว',
       data: this.serviceService.create(dto),
-    };
-  }
-
-  @Patch(':id')
-  @ApiOperation({ summary: 'แก้ไขข้อมูลบริการบางส่วน' })
-  update(@Param('id') id: string, @Body() dto: UpdateServiceDto): ApiResponse<ServiceModel> {
-    return {
-      success: true,
-      message: 'อัปเดตข้อมูลบริการสำเร็จ',
-      data: this.serviceService.update(id, dto),
     };
   }
 
