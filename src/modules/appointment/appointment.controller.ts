@@ -43,7 +43,7 @@ export class AppointmentController {
   }
 
   @Put(':id')
-  @ApiOperation({ summary: 'อัปเดตข้อมูลการนัดหมายทั้งหมด (Replace)' })
+  @ApiOperation({ summary: 'อัปเดตข้อมูลการนัดหมายทั้งหมด' })
   updateAll(@Param('id') id: string, @Body() dto: CreateAppointmentDto): ApiResponse<AppointmentModel> {
     return {
       success: true,
@@ -53,7 +53,7 @@ export class AppointmentController {
   }
 
   @Patch(':id')
-  @ApiOperation({ summary: 'แก้ไขข้อมูลการนัดหมายบางส่วน (Partial Update)' })
+  @ApiOperation({ summary: 'แก้ไขข้อมูลการนัดหมายบางส่วน' })
   partialUpdate(
     @Param('id') id: string,
     @Body() dto: UpdateAppointmentDto,
