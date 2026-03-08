@@ -20,13 +20,12 @@
 
 ### 1. Clone the Repository
 ```bash
-git clone [https://github.com/srnTone/oop-typescript-final-project-2026.git]
-(https://github.com/srnTone/oop-typescript-final-project-2026.git)
+git clone https://github.com/srnTone/oop-typescript-final-project-2026.git
 cd oop-typescript-final-project-2026
 
+```
 ### 2. Install Dependencies
-
-``` bash
+```bash
 npm install
 ```
 
