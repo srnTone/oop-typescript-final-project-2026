@@ -32,7 +32,7 @@ export class ServiceController {
   }
 
   @Put(':id')
-  @ApiOperation({ summary: 'อัปเดตข้อมูลบริการทั้งหมด (Replace)' })
+  @ApiOperation({ summary: 'อัปเดตข้อมูลบริการทั้งหมด' })
   updateAll(@Param('id') id: string, @Body() dto: CreateServiceDto): ApiResponse<ServiceModel> {
     return {
       success: true,
@@ -42,7 +42,7 @@ export class ServiceController {
   }
 
   @Patch(':id')
-  @ApiOperation({ summary: 'แก้ไขข้อมูลบริการบางส่วน (Partial Update)' })
+  @ApiOperation({ summary: 'แก้ไขข้อมูลบริการบางส่วน' })
   update(@Param('id') id: string, @Body() dto: UpdateServiceDto): ApiResponse<ServiceModel> {
     return {
       success: true,
