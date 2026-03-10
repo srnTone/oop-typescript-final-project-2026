@@ -6,6 +6,13 @@ import { UpdateAppointmentDto } from './dto/update-appointment.dto';
 import { AppointmentStatus } from './enums/appointment-status.enum';
 import { ServiceModel } from '../service/interfaces/service.interface';
 
+
+interface OverlapCheckData {
+serviceId?: string;
+appointmentDate?: string;
+startTime?: string;
+}
+
 @Injectable()
 export class AppointmentService {
   private readonly dbPath = 'data/appointments.json';
@@ -119,15 +126,18 @@ export class AppointmentService {
     return replacedAppointment;
   }
 
-  private checkOverlap(excludeId: string, dto: any, allAppointments: AppointmentModel[]) {
-    const services = FileUtil.readJsonFile<ServiceModel[]>(this.servicesDbPath);
-    const currentApp = allAppointments.find(a => a.id === excludeId);
-    
-    const serviceId = dto.serviceId || currentApp?.serviceId;
-    const date = dto.appointmentDate || currentApp?.appointmentDate;
-    const startTime = dto.startTime || currentApp?.startTime;
-    
-    const targetService = services.find(s => s.id === serviceId);
+  private checkOverlap(excludeId: string, dto: OverlapCheckData, allAppointments: AppointmentModel[]) {
+  // ดึงข้อมูล service ใช้หา duration
+  const currentApp = allAppointments.find(a => a.id === excludeId);
+
+  const services = FileUtil.readJsonFile<ServiceModel[]>(this.servicesDbPath);
+
+  const serviceId = dto.serviceId || currentApp?.serviceId;
+  const date = dto.appointmentDate || currentApp?.appointmentDate;
+  const startTime = dto.startTime || currentApp?.startTime; 
+    if (!startTime || !serviceId) return; // หากไม่มี startTime ให้หยุดทำงานหรือแจ้ง Error เพื่อป้องกันโปรแกรมค้าง
+
+  const targetService = services.find(s => s.id === serviceId);
     if (!targetService) return;
 
     const start = this.timeToMinutes(startTime);

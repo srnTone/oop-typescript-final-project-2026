@@ -1,5 +1,5 @@
 import { Controller, Get, Put, Post, Body, Param, Patch, Delete, HttpCode } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse as SwaggerResponse } from '@nestjs/swagger';
+import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { ServiceService } from './service.service';
 import { ServiceModel } from './interfaces/service.interface';
 import { ApiResponse } from '../../common/interfaces/api-response.interface';
