@@ -3,20 +3,19 @@ import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
-// Fuction เริ่มต้น Entry Point 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // 1. Setting Global Prefix 
+  app.setGlobalPrefix('api'); 
 
-  // 2. Eanable ValidationPipe 
+  app.enableCors(); //
+
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true,
     forbidNonWhitelisted: true,
     transform: true,
   }));
 
-  // 3. setting Swagger API Documentation
   const config = new DocumentBuilder()
     .setTitle('Appointment Booking System API')
     .setDescription('The API documentation for the final project')
@@ -26,9 +25,11 @@ async function bootstrap() {
     .build();
     
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api/docs', app, document); // API Documentation at http://localhost:3000/api/docs
+
+  SwaggerModule.setup('api/docs', app, document);
 
   await app.listen(3000);
+  console.log(`Application is running on: http://localhost:3000/api`);
 }
 
 bootstrap();
