@@ -15,9 +15,15 @@ startTime?: string;
 
 @Injectable()
 export class AppointmentService {
-  private readonly dbPath = 'data/appointments.json';
-  private readonly servicesDbPath = 'data/services.json';
-  private timeToMinutes(time: string): number { // แปลงเวลา "HH:mm" เป็นนาทีทั้งหมด
+  private readonly dbPath = 'data/appointments.json'; // ที่เก็บข้อมูลนัดหมาย
+  private readonly servicesDbPath = 'data/services.json'; // ที่เก็บข้อมูลบริการ (เอาไว้ดู duration)
+  
+  /**
+   * timeToMinutes: แปลงเวลาข้อความ "14:30" ให้กลายเป็นตัวเลขนาที
+   * สูตร: (ชั่วโมง * 60) + นาที
+   * ตัวอย่าง: "01:30" -> (1 * 60) + 30 = 90 นาที
+   */
+  private timeToMinutes(time: string): number { 
     const [hours, minutes] = time.split(':').map(Number);
     return hours * 60 + minutes;
   }
@@ -36,35 +42,45 @@ export class AppointmentService {
   }
 
   create(dto: CreateAppointmentDto): AppointmentModel {
+    // 1. อ่านข้อมูลบริการเพื่อหา 'duration' ของบริการที่ลูกค้าเลือก
     const services = FileUtil.readJsonFile<ServiceModel[]>(this.servicesDbPath);
     const targetService = services.find(s => s.id === dto.serviceId);
     
     if (!targetService) {
       throw new BadRequestException(`ไม่สามารถจองได้ เนื่องจากไม่พบรหัสบริการ: ${dto.serviceId}`);
     }
-
+    // 2. คำนวณช่วงเวลาที่จองใหม่ (เริ่ม - จบ) เป็นนาที
     const newStart = this.timeToMinutes(dto.startTime);
     const newEnd = newStart + targetService.duration;
+    // 3. ตรวจสอบความทับซ้อนกับคิวที่มีอยู่แล้ว
     const appointments = this.findAll();
     const isOverlapping = appointments.some(app => {
+      // ข้ามการเช็คถ้า: เป็นคนละวัน หรือ รายการเดิมถูกยกเลิกไปแล้ว
       if (app.appointmentDate !== dto.appointmentDate || app.status === AppointmentStatus.CANCELLED) {
         return false;
       }
 
       const existingService = services.find(s => s.id === app.serviceId);
       if (!existingService) return false;
-
+      
+			// คำนวณเวลาเริ่ม-จบ ของคิวเดิมในระบบ
       const existingStart = this.timeToMinutes(app.startTime);
       const existingEnd = existingStart + existingService.duration;
+      
+      /**
+       * ตรรกะการเช็คเวลาทับซ้อน (Overlap Condition):
+       * ถ้า (เริ่มใหม่ < จบเก่า) และ (จบใหม่ > เริ่มเก่า) แปลว่า "ทับซ้อนกัน"
+       */
       return newStart < existingEnd && newEnd > existingStart;
     });
 
     if (isOverlapping) {
       throw new BadRequestException('ช่วงเวลาดังกล่าวมีการจองแล้ว กรุณาเลือกเวลาอื่น');
     }
-
+    
+		// 4. บันทึกข้อมูลนัดหมายใหม่
     const newAppointment: AppointmentModel = {
-      id: `AP${Date.now().toString().slice(-6)}`,
+      id: `AP${Date.now().toString().slice(-6)}`, // สุ่ม ID จากเวลาปัจจุบัน
       ...dto,
       customerPhone: dto.customerPhone,
       notes: dto.notes ?? '', 
@@ -127,22 +143,24 @@ export class AppointmentService {
   }
 
   private checkOverlap(excludeId: string, dto: OverlapCheckData, allAppointments: AppointmentModel[]) {
-  // ดึงข้อมูล service ใช้หา duration
-  const currentApp = allAppointments.find(a => a.id === excludeId);
-
+	// 1. เตรียมข้อมูลพื้นฐาน (ดึงข้อมูลเดิมมาเป็นฐาน ถ้า DTO ไม่ได้ส่งค่าใหม่มา)  const currentApp = allAppointments.find(a => a.id === excludeId);
   const services = FileUtil.readJsonFile<ServiceModel[]>(this.servicesDbPath);
-
   const serviceId = dto.serviceId || currentApp?.serviceId;
+  
   const date = dto.appointmentDate || currentApp?.appointmentDate;
   const startTime = dto.startTime || currentApp?.startTime; 
+  
     if (!startTime || !serviceId) return; // หากไม่มี startTime ให้หยุดทำงานหรือแจ้ง Error เพื่อป้องกันโปรแกรมค้าง
-
+  // 2. หา duration ของบริการนั้นๆ
   const targetService = services.find(s => s.id === serviceId);
     if (!targetService) return;
 
     const start = this.timeToMinutes(startTime);
     const end = start + targetService.duration;
+    
+    // 3. ตรวจสอบกับรายการอื่นๆ ในระบบ
     const overlapping = allAppointments.some(app => {
+    // เงื่อนไขสำคัญ: ต้องไม่เช็คทับกับ ID ของตัวเอง (excludeId)
       if (app.id === excludeId || app.appointmentDate !== date || app.status === AppointmentStatus.CANCELLED) {
         return false;
       }
